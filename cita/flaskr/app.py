@@ -1,6 +1,9 @@
-from flaskr import create_app
+from importlib.resources import Resource
+
 from flask_restful import Api
-from .modelos import db
+
+from flaskr import create_app
+from .modelos import db, Cita
 from .vistas import VistaCitas
 
 app = create_app('default')
@@ -11,4 +14,4 @@ db.init_app(app)
 db.create_all()
 
 api = Api(app)
-api.add_resource(VistaCitas, '/cita')
+api.add_resource(VistaCitas, '/citas')
