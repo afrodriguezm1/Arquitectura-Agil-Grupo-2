@@ -1,0 +1,418 @@
+{
+	"info": {
+		"_postman_id": "ac80a603-919c-48b4-9014-3bcf75eef398",
+		"name": "Experimento seguridad autenticación",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SignUp Cliente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token_cliente\", jsonData[\"token de acceso\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Mario\",\r\n    \"contrasena\": \"contrasena\",\r\n    \"apellido\": \"Llanos\",\r\n    \"documento_identidad\": \"123456789\",\r\n    \"direccion\": \"Calle 1 #2-3\",\r\n    \"fecha_nacimiento\": \"1999-01-02\",\r\n    \"celular\": \"310101010\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/signin",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignUp Medico",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token_medico\", jsonData[\"token de acceso\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Sebastían\",\r\n    \"contrasena\": \"contrasena\",\r\n    \"apellido\": \"Lobos\",\r\n    \"documento_identidad\": \"987654321\",\r\n    \"direccion\": \"Calle 99 #88-87\",\r\n    \"fecha_nacimiento\": \"1960-08-18\",\r\n    \"celular\": \"310101010\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/signInMedico",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"signInMedico"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit cliente como Cliente Sin Token",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzMzIxODk2MSwianRpIjoiM2Q0NmU0MDktY2VhZi00MjM5LWI2MDAtZDViOTgzZmRmYjM5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEyMzQ1Njc4OSIsIm5iZiI6MTYzMzIxODk2MSwiZXhwIjoxNjMzMjE5ODYxfQ.yXn1KbtqyHNQxQFJc8ZN8wu38LLdB7Kg-yIpdTX36wM",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Nombre 2\",\r\n    \"contrasena\": \"contrasena 2\",\r\n    \"apellido\": \"apellido 2\",\r\n    \"documento_identidad\": \"123456789\",\r\n    \"direccion\": \"direccion\",\r\n    \"fecha_nacimiento\": \"123456789\",\r\n    \"celular\": \"310101010\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit cliente como Cliente Bad Token",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzMzIxODk2MSwianRpIjoiM2Q0NmU0MDktY2VhZi00MjM5LWI2MDAtZDViOTgzZmRmYjM5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEyMzQ1Njc4OSIsIm5iZiI6MTYzMzIxODk2MSwiZXhwIjoxNjMzMjE5ODYxfQ.yXn1KbtqyHNQxQFJc8ZN8wu38LLdB7Kg-yIpdTX36wM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Nombre 2\",\r\n    \"contrasena\": \"contrasena 2\",\r\n    \"apellido\": \"apellido 2\",\r\n    \"documento_identidad\": \"123456789\",\r\n    \"direccion\": \"direccion\",\r\n    \"fecha_nacimiento\": \"123456789\",\r\n    \"celular\": \"310101010\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit cliente como Medico",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token_medico}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Nombre 2\",\r\n    \"contrasena\": \"contrasena 2\",\r\n    \"apellido\": \"apellido 2\",\r\n    \"documento_identidad\": \"123456789\",\r\n    \"direccion\": \"direccion\",\r\n    \"fecha_nacimiento\": \"123456789\",\r\n    \"celular\": \"310101010\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit cliente como Cliente",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token_cliente}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Nombre 2\",\r\n    \"contrasena\": \"contrasena 2\",\r\n    \"apellido\": \"apellido 2\",\r\n    \"documento_identidad\": \"123456789\",\r\n    \"direccion\": \"direccion\",\r\n    \"fecha_nacimiento\": \"123456789\",\r\n    \"celular\": \"310101010\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete cliente como Medico Bad Token",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzMzIxODk2MSwianRpIjoiM2Q0NmU0MDktY2VhZi00MjM5LWI2MDAtZDViOTgzZmRmYjM5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEyMzQ1Njc4OSIsIm5iZiI6MTYzMzIxODk2MSwiZXhwIjoxNjMzMjE5ODYxfQ.yXn1KbtqyHNQxQFJc8ZN8wu38LLdB7Kg-yIpdTX36wM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"documento_identidad\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete cliente como Medico Sin Token",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzMzIxODk2MSwianRpIjoiM2Q0NmU0MDktY2VhZi00MjM5LWI2MDAtZDViOTgzZmRmYjM5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEyMzQ1Njc4OSIsIm5iZiI6MTYzMzIxODk2MSwiZXhwIjoxNjMzMjE5ODYxfQ.yXn1KbtqyHNQxQFJc8ZN8wu38LLdB7Kg-yIpdTX36wM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"documento_identidad\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete cliente como Cliente",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token_cliente}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"documento_identidad\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete cliente como Medico",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token_medico}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"documento_identidad\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/usuario",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000"
+		}
+	]
+}
