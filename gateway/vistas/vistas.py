@@ -1,17 +1,9 @@
 import time
-#from celery import Celery
 from flask_restful import Resource, Api
 from flask import Flask, request
 import requests
 import json
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
-
-#app = Celery('tasks', broker='redis://localhost:6379/0')
-
-
-#@app.task(name="tabla.agendar_cita")
-#def agendar_cita(cita_json):
-#    pass
 
 
 class VistaCitasMicro(Resource):
@@ -45,16 +37,28 @@ class VistaSignIn(Resource):
                                 'celular': request.json["celular"] })
         if(content.status_code == 204):
             token_de_acceso = create_access_token(identity=request.json["documento_identidad"])
+            f = open('./gateway-log.csv', 'a')
+            f.write('POST;/signin;200;token de acceso: {}\n'.format(token_de_acceso))
+            f.close()
             return {"token de acceso": token_de_acceso}
         else:
+            f = open('./gateway-log.csv', 'a')
+            f.write('POST;/signin;404; message: error al hacer signIn\n')
+            f.close()
             return {"message": "error al hacer signIn"}, 404
 
     def get(self):
         content = requests.get('http://127.0.0.1:5002/signIn', json={'documento_identidad': request.json["documento_identidad"],'contrasena': request.json["contrasena"]})
         if content.status_code == 204:
             token_de_acceso = create_access_token(identity=request.json["documento_identidad"])
+            f = open('./gateway-log.csv', 'a')
+            f.write('GET;/signin;200;token de acceso: {}\n'.format(token_de_acceso))
+            f.close()
             return {"token de acceso": token_de_acceso}
         else:
+            f = open('./gateway-log.csv', 'a')
+            f.write('GET;/signin;404; message: error al hacer signIn\n')
+            f.close()
             return {"message": "error al hacer signIn"}, 404
 
 class VistaSignInMedico(Resource):
@@ -69,8 +73,14 @@ class VistaSignInMedico(Resource):
                                 'celular': request.json["celular"] })
         if(content.status_code == 204):
             token_de_acceso = create_access_token(identity=request.json["documento_identidad"])
+            f = open('./gateway-log.csv', 'a')
+            f.write('POST;/signInMedico;200;token de acceso: {}\n'.format(token_de_acceso))
+            f.close()
             return {"token de acceso": token_de_acceso}
         else:
+            f = open('./gateway-log.csv', 'a')
+            f.write('POST;/signInMedico;404; message: error al hacer signIn\n')
+            f.close()
             return {"message": "error al hacer signIn"}, 404
 
 class VistaUpdateData(Resource):
@@ -83,13 +93,25 @@ class VistaUpdateData(Resource):
             if rol.json()['rol'] == "MEDICO":
                 content = requests.delete('http://127.0.0.1:5002/usuario', json={'documento_identidad': request.json["documento_identidad"]})
                 if content.status_code == 204:
+                    f = open('./gateway-log.csv', 'a')
+                    f.write('DELETE;/usuario;200;message: Usuario se eliminó exitosamente\n')
+                    f.close()
                     return {"message":"Usuario se eliminó exitosamente"}, 200
                 else:
-                    return {"message":"el usuario no está autenticado"}, 404
+                    f = open('./gateway-log.csv', 'a')
+                    f.write('DELETE;/usuario;404;message: El usuario no se puedo eliminar\n')
+                    f.close()
+                    return {"message":"El usuario no se puedo eliminar"}, 404
             else:
-                return "El usuario no tiene permisos para esta acción", 404
+                f = open('./gateway-log.csv', 'a')
+                f.write('DELETE;/usuario;403;message: El usuario no tiene permisos para esta acción\n')
+                f.close()
+                return "El usuario no tiene permisos para esta acción", 403
         else:
-            return "Ocurrio un erro", 404
+            f = open('./gateway-log.csv', 'a')
+            f.write('DELETE;/usuario;404;message: Ocurrio un error\n')
+            f.close()
+            return "Ocurrio un error", 404
 
     @jwt_required()
     def put(self):
@@ -105,10 +127,22 @@ class VistaUpdateData(Resource):
                                         'fecha_nacimiento': request.json["fecha_nacimiento"],
                                         'celular': request.json["celular"] })
                 if(content.status_code == 200):
-                    return {"message": "el usuario se actualizó correctamente"}
+                    f = open('./gateway-log.csv', 'a')
+                    f.write('PUT;/usuario;200;message: El usuario se actualizó correctamente\n')
+                    f.close()
+                    return {"message": "El usuario se actualizó correctamente"}
                 else:
-                    return {"message": "error no se actualizó"}, 404
+                    f = open('./gateway-log.csv', 'a')
+                    f.write('PUT;/usuario;404;message: El usuario se actualizó correctamente\n')
+                    f.close()
+                    return {"message": "El usuario no se actualizó correctamente"}, 404
             else:
-                return "El usuario no tiene permisos para esta acción", 404
+                f = open('./gateway-log.csv', 'a')
+                f.write('PUT;/usuario;403;message: El usuario no tiene permisos para esta acción\n')
+                f.close()
+                return "El usuario no tiene permisos para esta acción", 403
         else:
+            f = open('./gateway-log.csv', 'a')
+            f.write('PUT;/usuario;404;Ocurrio un error\n')
+            f.close()
             return "Ocurrio un error", 404
